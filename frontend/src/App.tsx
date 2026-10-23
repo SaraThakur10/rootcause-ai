@@ -94,7 +94,7 @@ type InvestigationResult = {
   notice?: string;
 };
 
-const API_URL = "http://127.0.0.1:8000";
+const API_URL = "https://rootcause-ai-qqd9.onrender.com";
 
 async function getJson<T>(url: string): Promise<T> {
   const response = await fetch(url);
