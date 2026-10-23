@@ -1,0 +1,22 @@
+
+timestamp,service,level,message
+2026-10-18 10:00:00,auth-service,INFO,User login successful
+2026-10-18 10:01:00,payment-service,INFO,Payment request received
+2026-10-18 10:02:00,auth-service,WARNING,Login retry threshold approaching
+2026-10-18 10:03:00,payment-service,ERROR,Database connection timeout
+2026-10-18 10:03:10,payment-service,ERROR,Database connection timeout
+2026-10-18 10:03:20,payment-service,ERROR,Database connection timeout
+2026-10-18 10:04:00,order-service,INFO,Order created successfully
+2026-10-18 10:05:00,payment-service,ERROR,Payment gateway unavailable
+2026-10-18 10:05:30,payment-service,ERROR,Payment gateway unavailable
+2026-10-18 10:06:00,auth-service,ERROR,Token validation failed
+2026-10-18 10:07:00,order-service,WARNING,Order processing delay
+2026-10-18 10:08:00,payment-service,ERROR,Database connection timeout
+2026-10-18 10:09:00,auth-service,INFO,Token refreshed successfully
+2026-10-18 10:10:00,order-service,ERROR,Inventory service timeout
+2026-10-18 10:10:30,order-service,ERROR,Inventory service timeout
+2026-10-18 10:11:00,payment-service,INFO,Payment completed
+2026-10-18 10:12:00,auth-service,ERROR,Token validation failed
+2026-10-18 10:13:00,payment-service,ERROR,Database connection timeout
+2026-10-18 10:14:00,order-service,INFO,Order confirmed
+2026-10-18 10:15:00,payment-service,ERROR,Database connection timeout
