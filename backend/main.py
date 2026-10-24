@@ -1,6 +1,7 @@
 
 from io import BytesIO
 from pathlib import Path
+import os
 
 import pandas as pd
 from fastapi import FastAPI, File, HTTPException, UploadFile
@@ -18,9 +19,18 @@ app = FastAPI(
     version="0.3.0",
 )
 
+allowed_origins = [
+    origin.strip()
+    for origin in os.getenv(
+        "FRONTEND_URLS",
+        "http://localhost:5173"
+    ).split(",")
+    if origin.strip()
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
