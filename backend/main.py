@@ -36,11 +36,30 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 DATA_DIR = Path(__file__).parent / "data"
 DATA_FILE = DATA_DIR / "sample_logs.csv"
 ANOMALY_TEST_FILE = DATA_DIR / "anomaly_test_logs.csv"
 EVENTS_FILE = DATA_DIR / "deployment_events.csv"
+MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10 MB
 
+async def read_csv_upload(file: UploadFile) -> bytes:
+    """Read a CSV upload while enforcing the maximum file size."""
+    content = await file.read(MAX_UPLOAD_SIZE + 1)
+
+    if len(content) > MAX_UPLOAD_SIZE:
+        raise HTTPException(
+            status_code=413,
+            detail="File too large. Maximum upload size is 10 MB.",
+        )
+
+    if not content:
+        raise HTTPException(
+            status_code=400,
+            detail="The uploaded file is empty.",
+        )
+
+    return content
 
 @app.get("/")
 def home():
@@ -77,10 +96,7 @@ async def analyze_uploaded_logs(file: UploadFile = File(...)):
     if not file.filename or not file.filename.lower().endswith(".csv"):
         raise HTTPException(status_code=400, detail="Please upload a CSV file.")
 
-    content = await file.read()
-
-    if not content:
-        raise HTTPException(status_code=400, detail="The uploaded file is empty.")
+    content = await read_csv_upload(file)
 
     try:
         data = pd.read_csv(BytesIO(content))
@@ -113,10 +129,7 @@ async def detect_uploaded_anomalies(file: UploadFile = File(...)):
     if not file.filename or not file.filename.lower().endswith(".csv"):
         raise HTTPException(status_code=400, detail="Please upload a CSV file.")
 
-    content = await file.read()
-
-    if not content:
-        raise HTTPException(status_code=400, detail="The uploaded file is empty.")
+    content = await read_csv_upload(file)
 
     try:
         data = pd.read_csv(BytesIO(content))
@@ -227,14 +240,8 @@ async def investigate_uploaded_dataset(file: UploadFile = File(...)):
             detail="Please upload a CSV file.",
         )
 
-    content = await file.read()
-
-    if not content:
-        raise HTTPException(
-            status_code=400,
-            detail="The uploaded file is empty.",
-        )
-
+    content = await read_csv_upload(file)
+   
     try:
         logs = pd.read_csv(BytesIO(content))
 
